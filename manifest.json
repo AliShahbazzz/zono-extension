@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Zono",
+  "version": "1.0",
+  "permissions": ["storage", "scripting", "activeTab", "downloads"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://web.whatsapp.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "./images/icon.png"
+  },
+  "icons": {
+    "48": "./images/icon.png"
+  }
+}
