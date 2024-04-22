@@ -1,0 +1,33 @@
+.zono-ext-text {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.zono-ext-root {
+  display: flex;
+  flex-direction: column;
+  min-width: 350px;
+  min-height: 200px;
+}
+
+.zono-ext-header,
+.zono-ext-body {
+  margin-bottom: 1em;
+}
+
+.zono-ext-heading {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.zono-ext-subheading {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.zono-ext-button {
+  outline: none;
+  padding: 10px 12px;
+  background-color: aliceblue;
+  border: 1px solid #b3b3b3ea;
+  cursor: pointer;
+}
