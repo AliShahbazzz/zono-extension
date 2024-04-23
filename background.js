@@ -11,3 +11,7 @@
 //     sendResponse({ received: true }); //respond however you like
 //   }
 // );
+
+chrome.runtime.onInstalled.addListener(function () {
+  // Handle installation
+});

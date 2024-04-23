@@ -1,13 +1,15 @@
 // class ContactFinder {
 //   #db;
 //   #chatToFind;
+//   #chatList;
 //   #dbName = "model-storage";
 //   #chatsCol = "chat";
 //   #contactCol = "contact";
 //   #groupCol = "participant";
 
-//   constructor(chatGroupName) {
+//   constructor(chatGroupName, chatList) {
 //     this.#chatToFind = chatGroupName;
+//     this.#chatList = chatList;
 //   }
 
 //   async openConnection() {
@@ -51,7 +53,11 @@
 //     });
 //   }
 
-//   async #getGroups() {
+//   async getAllGroups() {
+//     return await this.#promisifyCol(this.#groupCol);
+//   }
+
+//   async getGroups() {
 //     const chats = (await this.#getChats()).map((chat) => chat.id);
 //     const allGroups = await this.#promisifyCol(this.#groupCol);
 
@@ -61,7 +67,7 @@
 //   }
 
 //   async #getGroupParticipants() {
-//     const groups = await this.#getGroups();
+//     const groups = await this.getGroups();
 //     const map = new Map();
 
 //     groups.forEach((group) => {
@@ -122,46 +128,35 @@
 //   }
 // }
 
-// // function waitForWhatsAppWebToLoad(selector, maxAttempts = 10) {
-// //   return new Promise((resolve, reject) => {
-// //     const attemptToFindElement = (attempts) => {
-// //       const element = document.querySelector(selector);
-// //       if (element) {
-// //         resolve(element);
-// //       } else if (attempts < maxAttempts) {
-// //         setTimeout(() => attemptToFindElement(attempts + 1), 1000);
-// //       } else {
-// //         reject(new Error("Element not found within max attempts: " + selector));
-// //       }
-// //     };
-// //     attemptToFindElement(0);
-// //   });
-// // }
-
-// const start = async () => {
+// (async () => {
 //   try {
-//     // // await waitForWhatsAppWebToLoad("header span"); // Wait for at least one span under header to be available
-
-//     const isGroupSelected = document.querySelectorAll("header").length > 1;
-//     console.log(document.querySelectorAll("header"));
-//     if (isGroupSelected) {
+//     const isScreenLoaded = document.querySelectorAll("header").length !== 0;
+//     console.log(document.querySelectorAll("header").length !== 0);
+//     if (isScreenLoaded) {
 //       const contactFinder = new ContactFinder(
-//         document
-//           .querySelectorAll("header")[1]
-//           .querySelectorAll("span")[1].innerHTML
+//         document.querySelectorAll("header")[0].innerHTML
 //       );
 //       console.log("contactFinder: ", contactFinder);
-//       const members = await contactFinder.getGroupMembers(); // This will return a JS Map Object
-//       console.log("members: ", members);
-//     } else {
-//       console.log("Please select a group");
-//     }
+//       const allGroups = await contactFinder.getAllGroups();
 
-//     // Optionally download CSV
-//     // await contactFinder.downloadMembersAsCSV(); // This will download the contacts as CSV
+//       console.log("allGroups: ", allGroups);
+
+//       localStorage.setItem("groups", allGroups);
+
+//       // const group_select = document.getElementById("selected_group");
+
+//       // console.log("group_select: ", group_select);
+
+//       // allGroups.forEach((group) => {
+//       //   group_select.options[group_select.options.length] = new Option(
+//       //     "Text 1",
+//       //     "Value1"
+//       //   );
+//       // });
+//     } else {
+//       console.log("WhatsApp not loaded");
+//     }
 //   } catch (error) {
 //     console.log(error);
 //   }
-// };
-
-// start();
+// })();

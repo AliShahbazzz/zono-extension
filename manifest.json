@@ -6,12 +6,7 @@
   "background": {
     "service_worker": "background.js"
   },
-  "content_scripts": [
-    {
-      "matches": ["https://web.whatsapp.com/*"],
-      "js": ["content.js"]
-    }
-  ],
+
   "action": {
     "default_popup": "popup.html",
     "default_icon": "./images/logo-48.png"
