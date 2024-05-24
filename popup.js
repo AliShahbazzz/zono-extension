@@ -90,13 +90,13 @@ const start = async (selectedGroups) => {
       }
       if (num && members.get(num)) {
         members.set(num, {
-          phoneNum: num,
+          mobileNumber: num,
           name: contact.name,
           pushname: contact.pushname,
         });
       }
     });
-    
+
     return members;
   };
 
@@ -124,22 +124,38 @@ const start = async (selectedGroups) => {
   try {
     // // await waitForWhatsAppWebToLoad("header span"); // Wait for at least one span under header to be available
 
-    const isGroupSelected = document.querySelectorAll("header").length > 3;
+    // const isGroupSelected = document.querySelectorAll("header").length > 3;
 
-    console.log(document.querySelectorAll("header"));
+    // console.log(document.querySelectorAll("header"));
     if (selectedGroups.length !== 0) {
-      const result = [];
-      const promises = selectedGroups.map(async (group) => {
-        chatToFind = group;
-        console.log("chatToFind: ", chatToFind);
-        const contacts = await getGroupMembers();
+      const processGroupsSequentially = async (selectedGroups) => {
+        const result = [];
 
-        result.push(...Array.from(contacts.values()));
+        for (const group of selectedGroups) {
+          chatToFind = group?.id;
+          console.log("chatToFind: ", chatToFind);
+
+          // Await the result of the asynchronous function
+          const contacts = await getGroupMembers();
+
+          // Push the result into the result array
+          result.push({
+            groupId: group?.id,
+            name: group?.name,
+            customers: [...Array.from(contacts.values())],
+          });
+        }
+
+        // After all groups have been processed, return the result
+        return result;
+      };
+
+      // Usage
+      processGroupsSequentially(selectedGroups).then((result) => {
+        console.log("All groups processed:", { groups: result });
       });
-      // Wait for all promises to resolve
-      await Promise.all(promises);
 
-      console.log("result: ", result);
+      return;
     } else {
       console.log("Please select a group");
     }
@@ -158,7 +174,7 @@ document.getElementById("extractBtn").onclick = function () {
     const checkedInputs = [];
     checkboxes.forEach((checkbox) => {
       if (checkbox.checked) {
-        checkedInputs.push(checkbox.value);
+        checkedInputs.push({ id: checkbox.value, name: checkbox.name });
       }
     });
     return checkedInputs;

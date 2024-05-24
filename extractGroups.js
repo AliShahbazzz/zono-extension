@@ -129,19 +129,19 @@ const extractGroups = async () => {
 
   try {
     const isScreenLoaded = document.querySelectorAll("header").length !== 0;
-    console.log(document.querySelectorAll("header").length !== 0);
+    // console.log(document.querySelectorAll("header").length !== 0);
     if (isScreenLoaded) {
       const contactFinder = new ContactFinder(
         document.querySelectorAll("header")[0].innerHTML
       );
-      console.log("contactFinder: ", contactFinder);
+      // console.log("contactFinder: ", contactFinder);
       const allGroups = await contactFinder.getAllGroups();
 
-      console.log("allGroups: ", allGroups);
+      // console.log("allGroups: ", allGroups);
 
       const allChats = await contactFinder.promisifyCol("chat");
 
-      console.log("allChats: ", allChats);
+      // console.log("allChats: ", allChats);
 
       const filteredName = allChats
         .filter((chat) => {
@@ -151,7 +151,7 @@ const extractGroups = async () => {
           return { name: group.name, id: group.id };
         });
 
-      console.log("filteredName: ", filteredName);
+      // console.log("filteredName: ", filteredName);
 
       return filteredName;
     } else {
@@ -169,34 +169,14 @@ const updateList = async (allGroups) => {
     <div>
     ${allGroups
       .map((group) => {
-        return `<input type="checkbox" id="${group.id}" name="${group.id}" value="${group.id}" />  
+        return `<input type="checkbox" id="${group.id}" name="${group.name}" value="${group.id}" />  
         <label>${group.name}</label> <br>`;
       })
       .join("")}
     </div>`;
 
-  console.log("updatedList: ", updatedList);
+  // console.log("updatedList: ", updatedList);
   list.innerHTML = updatedList;
-
-  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-  checkboxes.forEach((checkbox) => {
-    checkbox.addEventListener("change", () => {
-      // Call function to get checked inputs
-      const checkedInputs = getCheckedInputs();
-      console.log("Checked inputs:", checkedInputs);
-    });
-  });
-
-  // Function to get checked inputs
-  const getCheckedInputs = () => {
-    const checkedInputs = [];
-    checkboxes.forEach((checkbox) => {
-      if (checkbox.checked) {
-        checkedInputs.push(checkbox.value);
-      }
-    });
-    return checkedInputs;
-  };
 };
 
 document.addEventListener("DOMContentLoaded", function () {
