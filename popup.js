@@ -151,11 +151,60 @@ const start = async (selectedGroups) => {
       };
 
       // Usage
-      processGroupsSequentially(selectedGroups).then((result) => {
-        console.log("All groups processed:", { groups: result });
-      });
+      await processGroupsSequentially(selectedGroups).then(async (result) => {
+        const finalJson = { groups: result };
+        console.log("All groups processed:", finalJson);
 
-      return;
+        const urlParams = new URLSearchParams(window.location.search);
+        const workspaceId = urlParams.get("workspaceId");
+
+        console.log("workspaceId: ", workspaceId);
+
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXIiOnsiaWQiOiI4ZDgyOGMyOS05MjE5LTQ3Y2YtYmU1Yi1iYTkzN2RkN2RjOGMifX0sInNlcnZlciI6Inpvbm9hZG1pbiIsImlhdCI6MTcxNjg5OTMzMX0.D_NSG7W-BwfEVCdz2lUWm5CuyRmdtAT-6D2quAr02Qc`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            documentType: "whatsappGroups",
+            mimeType: "application/json",
+            entityId: workspaceId,
+          }),
+        };
+
+        await fetch(
+          `https://api-qa.zono.digital/workspaces/documents/v2/${workspaceId}?sellerWorkspaceId=${workspaceId}`,
+          requestOptions
+        )
+          .then(async (response) => {
+            console.log("response: ", response);
+
+            if (response) {
+              const presignedUrl = await response
+                .json()
+                .then((res) => res.presignedUrl);
+
+              console.log("presignedUrl: ", presignedUrl);
+
+              await fetch(presignedUrl, {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(finalJson),
+              }).then((res) => {
+                window.open(
+                  "http://localhost:4200/admin/communication?showPreview=true",
+                  "_self"
+                );
+                return true;
+              });
+            }
+          })
+          .then((result) => console.log(result))
+          .catch((error) => console.error(error));
+      });
     } else {
       console.log("Please select a group");
     }
@@ -167,7 +216,11 @@ const start = async (selectedGroups) => {
   }
 };
 
-document.getElementById("extractBtn").onclick = function () {
+document.getElementById("extractBtn").onclick = async () => {
+  const btn = document.getElementById("extractBtn");
+
+  btn.innerText = "Please wait...";
+
   const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
   const getCheckedInputs = () => {
@@ -185,10 +238,16 @@ document.getElementById("extractBtn").onclick = function () {
   console.log("selectedGroups: ", selectedGroups);
 
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.scripting.executeScript({
-      target: { tabId: tabs[0].id },
-      function: start,
-      args: [selectedGroups],
-    });
+    chrome.scripting.executeScript(
+      {
+        target: { tabId: tabs[0].id },
+        function: start,
+        args: [selectedGroups],
+      },
+      (results) => {
+        console.log("results: ", results);
+        window.close();
+      }
+    );
   });
 };

@@ -3,7 +3,7 @@
 
 <head>
   <title>Zono</title>
-  <link rel="stylesheet" href="popup.css">
+  <link rel="stylesheet" href="popup.css" />
 </head>
 
 <body class="zono-ext-root">
@@ -11,17 +11,21 @@
     <span class="zono-ext-heading zono-ext-text">Zono WhatsApp Integrator</span>
   </div>
   <div class="zono-ext-body">
-    <span class="zono-ext-subheading zono-ext-text">Select a group to extract contacts</span>
+    <span class="zono-ext-subheading zono-ext-text" id="zono-ext-subheading-text">Select a group to extract
+      contacts</span>
 
     <!-- <select name="selected_group" id="selected_group">
     </select> -->
     <div id="groupList"></div>
   </div>
-  <!-- <button id="fetchGroups" class="zono-ext-button zono-ext-text">Fetch All Groups</button> -->
-  <button id="extractBtn" class="zono-ext-button zono-ext-text">Extract Info</button>
+
+  <button id="extractBtn" class="zono-ext-button zono-ext-text">
+    Extract Info
+  </button>
 
   <script src="popup.js"></script>
-  <script src="extractGroups.js"></script>
+  <script src="onOpenPopup.js"></script>
+  <script src="fs.min.js"></script>
 </body>
 
 </html>

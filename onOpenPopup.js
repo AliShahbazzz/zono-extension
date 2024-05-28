@@ -137,11 +137,11 @@ const extractGroups = async () => {
       // console.log("contactFinder: ", contactFinder);
       const allGroups = await contactFinder.getAllGroups();
 
-      // console.log("allGroups: ", allGroups);
+      console.log("allGroups: ", allGroups);
 
       const allChats = await contactFinder.promisifyCol("chat");
 
-      // console.log("allChats: ", allChats);
+      console.log("allChats: ", allChats);
 
       const filteredName = allChats
         .filter((chat) => {
@@ -156,6 +156,8 @@ const extractGroups = async () => {
       return filteredName;
     } else {
       console.log("WhatsApp not loaded");
+      console.log("hello");
+      return "WhatsApp not loaded";
     }
   } catch (error) {
     console.log(error);
@@ -179,6 +181,14 @@ const updateList = async (allGroups) => {
   list.innerHTML = updatedList;
 };
 
+const upadteError = () => {
+  const span = document.getElementById("zono-ext-subheading-text");
+  const extractBtn = document.getElementById("extractBtn");
+
+  span.innerHTML = `Please open WhatsApp Web to continue`;
+  extractBtn.style.display = "none";
+};
+
 document.addEventListener("DOMContentLoaded", function () {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     chrome.scripting.executeScript(
@@ -189,17 +199,13 @@ document.addEventListener("DOMContentLoaded", function () {
       (response) => {
         console.log("response: ", response);
         console.log("result: ", response[0].result);
-        updateList(response[0].result);
+        if (typeof response[0].result === "string") {
+          console.log("WhatsApp not loaded");
+          upadteError();
+        } else {
+          updateList(response[0].result);
+        }
       }
     );
   });
 });
-
-// document.getElementById("fetchGroups").onclick = function () {
-//   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-//     chrome.scripting.executeScript({
-//       target: { tabId: tabs[0].id },
-//       function: fetchGroups,
-//     });
-//   });
-// };
