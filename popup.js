@@ -195,7 +195,7 @@ const start = async (selectedGroups) => {
                 body: JSON.stringify(finalJson),
               }).then((res) => {
                 window.open(
-                  "http://localhost:4200/admin/communication?showPreview=true",
+                  "https://app-qa.zono.digital/admin/communication?showPreview=true",
                   "_self"
                 );
                 return true;

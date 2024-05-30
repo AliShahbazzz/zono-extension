@@ -168,11 +168,11 @@ const updateList = async (allGroups) => {
   const list = document.getElementById("groupList");
 
   const updatedList = `
-    <div>
+    <div style="height: 90px; overflow: auto; ">
     ${allGroups
       .map((group) => {
         return `<input type="checkbox" id="${group.id}" name="${group.name}" value="${group.id}" />  
-        <label>${group.name}</label> <br>`;
+        <label style="font-size: 14px;">${group.name}</label> <br>`;
       })
       .join("")}
     </div>`;
