@@ -163,7 +163,11 @@ const start = async (selectedGroups) => {
         const requestOptions = {
           method: "POST",
           headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXIiOnsiaWQiOiI4ZDgyOGMyOS05MjE5LTQ3Y2YtYmU1Yi1iYTkzN2RkN2RjOGMifX0sInNlcnZlciI6Inpvbm9hZG1pbiIsImlhdCI6MTcxNjg5OTMzMX0.D_NSG7W-BwfEVCdz2lUWm5CuyRmdtAT-6D2quAr02Qc`,
+            Authorization: `Basic ${btoa(
+              "zoDemo" +
+                ":" +
+                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            )}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -174,7 +178,7 @@ const start = async (selectedGroups) => {
         };
 
         await fetch(
-          `https://api-qa.zono.digital/workspaces/documents/v2/${workspaceId}?sellerWorkspaceId=${workspaceId}`,
+          `https://api-qa.zono.digital/hub/workspaces/documents/v2/${workspaceId}?sellerWorkspaceId=${workspaceId}`,
           requestOptions
         )
           .then(async (response) => {
